@@ -1,6 +1,3 @@
-Attribute VB_Name = "Module1"
-
-
 Sub MultipleYearStockData():
     Const YEARLY_CHANGE_COL As Integer = 10
     Const CLOSE_COL As Integer = 6
