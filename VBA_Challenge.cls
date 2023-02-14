@@ -1,5 +1,5 @@
 Sub MultipleYearStockData():
-    Const YEARLY_CHANGE_COL As Integer = 10
+Const YEARLY_CHANGE_COL As Integer = 10
     Const CLOSE_COL As Integer = 6
     Dim WS As Worksheet
     For Each WS In Worksheets
@@ -28,7 +28,7 @@ Sub MultipleYearStockData():
         Dim YearlyChange As Double
         Dim PercentChange As Double
         Dim StockVolume As Double
-        Dim StockVolumeTotal As Double
+        Dim TotalStockVolume As Double
         Dim GreatVolume As Double
         Dim GreatDecrease As Double
         Dim GreatIncrease As Double
@@ -40,57 +40,56 @@ Sub MultipleYearStockData():
 
 
         LastAValue = Cells(Rows.Count, "A").End(xlUp).Row
-            For InputRow = 2 To LastAValue
-                If Cells(InputRow, 1).Value <> Cells(InputRow, 1).Value Then
-                Cells(OutputRow, 9).Value = Cells(InputRow, 1).Value
+        For InputRow = 2 To LastAValue
+            If Cells(InputRow + 1, 1).Value <> Cells(InputRow, 1).Value Then
+            Cells(OutputRow, 9).Value = Cells(InputRow, 1).Value
                 
                 'Inputs
-                ClosePrice = Cells(InputRow, 6).Value
+            ClosePrice = Cells(InputRow, 6).Value
                 
                 'Calculate Yearly Change
-                YearlyChange = ClosePrice - OpenPrice
+            YearlyChange = ClosePrice - OpenPrice
                 
                 'Outputs
-                Cells(OutputRow, YEARLY_CHANGE_COL).Value = YearlyChange
+            Cells(OutputRow, 10).Value = YearlyChange
                 'CONDITIONAL FORMATTING
                 'RED IS NEGATIVE, GREEN IS POSITIVE
 
                     'Conditional formating
-                    If Cells(OutputRow, 10).Value < 0 Then
-                
-                    'Set cell background color to red
-                    WS.Cells(OutputRow, 10).Interior.ColorIndex = 3
-                
-                    Else
-                
-                    'Set cell background color to green
-                    WS.Cells(OutputRow, 10).Interior.ColorIndex = 4
-                
-                    End If
+                If Cells(OutputRow, 10).Value < 0 Then
                     
-                    'Calculate PercentChange
-                    If Cells(X, 3).Value <> 0 Then
-                    PercentChange = ((Cells(InputRow, 6).Value - Cells(X, 3).Value) / Cells(X, 3).Value)
+                        'Set cell background color to red
+                    Cells(OutputRow, 10).Interior.ColorIndex = 3
                     
-                    Cells(OutputRow, 11).Value = Format(PercentChange, "Percent")
+                Else
                     
-                    Else
+                        'Set cell background color to green
+                    Cells(OutputRow, 10).Interior.ColorIndex = 4
                     
-                    Cells(OutputRow, 11).Value = Format(0, "Percent")
+                End If
+            OutputRow = OutputRow + 1
+            End If
+            'Calculate PercentChange
+            If Cells(X, 3).Value <> 0 Then
+                PercentChange = ((Cells(InputRow, 6).Value - Cells(X, 3).Value) / Cells(X, 3).Value)
                     
-                    End If
+                Cells(OutputRow, 11).Value = Format(PercentChange, "Percent")
                     
+            Else
+                    
+                Cells(OutputRow, 11).Value = Format(0, "Percent")
+                    
+            End If
+            TotalStockVolume = TotalStockVolume + Cells(InputRow, 7).Value
                 'Total Volume
-                Cells(OutputRow, 12).Value = WorksheetFunction.Sum(Range(Cells(X, 7), WS.Cells(InputRow, 7)))
+            Cells(OutputRow, 12).Value = WorksheetFunction.Sum(Range(Cells(X, 7), Cells(InputRow, 7)))
                 
                 'Increase OutputRow
-                OutputRow = OutputRow + 1
+            OutputRow = OutputRow + 1
                 
                 'Set new start row of the ticker block
-                X = InputRow + 1
-                
-                End If
-            
+            X = InputRow + 1
+  
             Next InputRow
             
         'Find Last I Value
@@ -138,10 +137,10 @@ Sub MultipleYearStockData():
                 GreatDecrease = GreatDecrease
                 
                 End If
-            
-            Next InputRow
-            
-    Next WS
         
-End Sub
+        
+        Next InputRow
+    Next WS
 
+End Sub
+    
